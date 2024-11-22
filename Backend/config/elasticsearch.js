@@ -1,4 +1,8 @@
+import env from "dotenv";
+
 const { Client } = require('@elastic/elasticsearch');
+
+env.config();
 
 const esClient = new Client({ node: process.env.ES_URI });
 
