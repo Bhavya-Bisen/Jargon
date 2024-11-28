@@ -15,7 +15,7 @@ passport.use(
           const user = result.rows[0];
           const storedHashedPassword = user.password;
           if (!user) {
-            return done(null, false, { message: 'Incorrect email or password.' });
+            return cb(null, false, { message: 'Incorrect email or password.' });
         }
           bcrypt.compare(password, storedHashedPassword, (err, valid) => {
             if (err) {
@@ -29,9 +29,7 @@ passport.use(
             }
           });
 
-          if (!user.isActive) {
-            return done(null, false, { message: 'Account inactive.' });
-          }
+          
           
         } else {
           return cb("User not found");
