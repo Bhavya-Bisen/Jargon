@@ -6,6 +6,7 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import { loginRoute, registerRoute,ensureAuthenticated, authorizeRoles } from "./auth/auth.js";
 import {locatepostoffice} from "./services/locatePO.js";
+import { dashboard_data } from "./services/dashboard.js";
 
 
 env.config();
@@ -57,3 +58,5 @@ app.get("/user/profile",
     res.send("Welcome to your profile");
   }
 );
+
+app.get("/dashboard",dashboard_data);

@@ -1,4 +1,3 @@
-import { compare } from "bcrypt";
 import pool from "../config/postgres.js";
 
 const locatepostoffice=async (req,res,next)=>{
