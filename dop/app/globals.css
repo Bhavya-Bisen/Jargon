@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bgnav{
+    background: rgba(228, 226, 214, 1);
+}
