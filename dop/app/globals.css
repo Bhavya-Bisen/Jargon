@@ -5,3 +5,11 @@
 .bgnav{
     background: rgba(228, 226, 214, 1);
 }
+
+body{
+    background: rgba(224, 212, 197, 1);
+}
+
+.textnav{
+    color: rgba(112, 65, 22, 1);
+}
