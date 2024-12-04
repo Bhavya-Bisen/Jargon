@@ -166,7 +166,7 @@ const Navbar: React.FC = () => {
                     ) : (
                       <a
                         href={item.href}
-                        className='text-center textnav hover:bg-white hover:text-black rounded-lg p-2 '
+                        className='text-center textnav hover:bg-[rgba(194,182,168,1)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 '
                       >
                         {item.label}
                       </a>
@@ -217,7 +217,7 @@ const Navbar: React.FC = () => {
                       <div>
                         <button
                           onClick={() => toggleMobileDropdown(item.label)}
-                          className='block w-full text-left textnav hover:bg-white hover:text-black rounded-lg p-2 focus:outline-none items-center'
+                          className='block w-full text-left textnav hover:bg-[rgba(194,182,168,1)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 focus:outline-none items-center'
                         >
                           {item.label}
                           <svg
@@ -245,7 +245,7 @@ const Navbar: React.FC = () => {
                                   <>
                                     <button
                                       onClick={() => toggleMobileDropdown(subItem.label)}
-                                      className='block w-full text-left textnav hover:bg-white hover:text-black rounded-lg p-2 focus:outline-none items-center'
+                                      className='block w-full text-left textnav hover:bg-[rgba(194,182,168,1)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 focus:outline-none items-center'
                                     >
                                       {subItem.label}
                                       <svg
@@ -271,7 +271,7 @@ const Navbar: React.FC = () => {
                                           <a
                                             key={nestedIndex}
                                             href={nestedItem.href}
-                                            className='block textnav hover:bg-white hover:text-black rounded-lg p-2 '
+                                            className='block textnav hover:bg-[rgba(194,182,168,1)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 '
                                           >
                                             {nestedItem.label}
                                           </a>
@@ -282,7 +282,7 @@ const Navbar: React.FC = () => {
                                 ) : (
                                   <a
                                     href={subItem.href}
-                                    className='block textnav hover:bg-white hover:text-black rounded-lg p-2 '
+                                    className='block textnav hover:bg-[rgba(194,182,168,1)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 '
                                   >
                                     {subItem.label}
                                   </a>
@@ -295,7 +295,7 @@ const Navbar: React.FC = () => {
                     ) : (
                       <a
                         href={item.href}
-                        className='block text-center textnav hover:bg-white hover:text-black rounded-lg p-2 '
+                        className='block text-center textnav hover:bg-[rgba(194,182,168,1)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 '
                       >
                         {item.label}
                       </a>

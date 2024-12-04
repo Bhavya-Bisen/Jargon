@@ -13,13 +13,13 @@ export const Header = () => {
         <div className='ml-4 flex items-center space-x-4 bgnav rounded-lg '>
           <a
             href='/login'
-            className='text-center textnav hover:bg-white hover:text-black rounded-lg p-2 '
+            className='text-center textnav hover:bg-[rgba(194,182,168,1)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 '
           >
             Login
           </a>
           <a
             href='/signup'
-            className='text-center textnav hover:bg-white hover:text-black rounded-lg p-2 '
+            className='text-center textnav hover:bg-[rgba(194,182,168,1)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 '
           >
             Sign Up
           </a>
