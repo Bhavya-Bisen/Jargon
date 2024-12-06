@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Header } from "./Header";
-import { Footer } from "./Footer";
+import { Header } from "./(Template)/Header";
+import { Footer } from "./(Template)/Footer";
+import { DynamicBannerProvider } from "./DynamicBannerProvider"; 
 
 const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+  src: "/fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+  src: "/fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
 });
@@ -25,14 +26,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <>
-        <Header />
+        <DynamicBannerProvider>
         {children}
+        </DynamicBannerProvider>
         <Footer />
         </>
       </body>
