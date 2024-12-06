@@ -179,7 +179,7 @@ const Navbar: React.FC = () => {
             {/* Mobile Menu Button */}
             <div className='md:hidden flex items-center'>
               <button
-                className='inline-flex items-center justify-center p-2 rounded-md textnav hover:textnav focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'
+                className='inline-flex items-center justify-center p-2 rounded-md textnav hover:text-[rgba(112, 65, 22, 1)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'
                 onClick={toggleNavbar}
               >
                 {isClick ? (

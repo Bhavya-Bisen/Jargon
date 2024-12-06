@@ -44,10 +44,10 @@ const Dropdown: React.FC<DropdownProps> = ({ label, menuName, submenuItems }) =>
   }, []);
 
   return (
-    <div className='relative' ref={dropdownRef}>
+    <div className='relative ' ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className='text-center textnav hover:bg-[rgba(205, 162, 116, 0.3)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 focus:outline-none flex items-center'
+        className='text-center textnav hover:bg-[rgba(205,162,116,0.3)] hover:text-[rgba(112,65,22,1)] rounded-lg p-2 focus:outline-none flex items-center'
       >
         {label}
         {submenuItems && submenuItems.length > 0 && (
@@ -71,7 +71,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, menuName, submenuItems }) =>
         <div
           className={`${
             menuName !== 'top-level' ? 'absolute left-full top-0' : 'absolute left-0 mt-2'
-          } w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10`}
+          } w-48 rounded-md shadow-lg bg-white ring-1  ring-black ring-opacity-5 z-10`}
         >
           <div className='py-1'>
             {submenuItems.map((item, index) => (
