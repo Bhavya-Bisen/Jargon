@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import Dropdown from './Dropdown'; // Adjust the import path
-import { MenuItem } from './type'; 
+import Dropdown from '../components/Dropdown'; // Adjust the import path
+import { MenuItem } from '../components/type'; 
 
 const Navbar: React.FC = () => {
   const [isClick, setIsClick] = useState(false);
@@ -106,14 +106,8 @@ const Navbar: React.FC = () => {
       href: '/',
     },
     {
-      label: 'News & Media Outlet',
-      menuName:'News',
-      submenuItems:[
-        {label:'News & Updates',href:'/'},
-        {label:'Tendor',href:"/"},
-        {label:'Recuitement',href:'/'},
-        {label:'Notifications',href:"/"},
-      ]},
+      label: 'News',
+      href:'/'},
     {
       label: 'Business Section',
       menuName:'Business',
@@ -141,7 +135,7 @@ const Navbar: React.FC = () => {
         {label:'Stamp Catalogue',href:'https://postagestamps.gov.in/Stamps.aspx'},
         {label:'Stamp Calendar',href:'/'},
         {label:'Deen Dayal SPARSH Yojana',href:'/'},
-        {label:'India Postage Stamps',href:'https://postagestamps.gov.in/'}
+        {label:'India Postage Stamps',href:'https://postagestamps.gov.in/'},
       ]
       },
   ];
