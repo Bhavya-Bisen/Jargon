@@ -33,6 +33,42 @@ const dashboard_data=async (req,res,next)=>{
         COUNT(*) FILTER (WHERE "Citizen_Charter_Compliance" = TRUE) AS "On_Time_Deliveries"
         FROM "Delivery_Data";
 `);
+
+const avg_sp_local=await pool.query(`
+        SELECT 
+        AVG("Delivery_Time") / 86400 AS "Average_Delivery_Time_Speed_Post_Local" 
+        FROM "Delivery_Data"
+        WHERE "Service_ID" = 'DY1201';
+`);
+
+const avg_sp_metro=await pool.query(`
+        SELECT 
+        AVG("Delivery_Time") / 86400 AS "Average_Delivery_Time_Speed_Post_Metro" 
+        FROM "Delivery_Data"
+        WHERE "Service_ID" = 'DY1202';
+`);
+
+const avg_sp_state=await pool.query(`
+        SELECT 
+        AVG("Delivery_Time") / 86400 AS "Average_Delivery_Time_Speed_Post_Same_State" 
+        FROM "Delivery_Data"
+        WHERE "Service_ID" = 'DY1203';
+`);
+
+const avg_sp_cstate=await pool.query(`
+        SELECT 
+        AVG("Delivery_Time") / 86400 AS "Average_Delivery_Time_Speed_Post_Capital_to_Capital_State" 
+        FROM "Delivery_Data"
+        WHERE "Service_ID" = 'DY1205';
+`);
+
+const avg_sp_rc=await pool.query(`
+        SELECT 
+        AVG("Delivery_Time") / 86400 AS "Average_Delivery_Time_Speed_Post_Rest_of_the_Country" 
+        FROM "Delivery_Data"
+        WHERE "Service_ID" = 'DY1204';
+`);
+
         return res.status(200).json({
             message:"Your Data is ready",
             Average_Delivery_Time:avg_dy_td.rows[0],
@@ -41,6 +77,11 @@ const dashboard_data=async (req,res,next)=>{
             Delayed_Percentage_Deliveries:delayed_per_dy.rows[0],
             Total_Deliveries:total_dy.rows[0],
             Total_On_Time_Delivery:total_ot_dy.rows[0],
+            Average_Delivery_Speed_Post_Local:avg_sp_local.rows[0],
+            Average_Delivery_Speed_Post_Metro:avg_sp_metro.rows[0],
+            Average_Delivery_Speed_Post_Same_State:avg_sp_state.rows[0],
+            Average_Delivery_Speed_Post_Capital_to_Capital_State:avg_sp_cstate.rows[0],
+            Average_Delivery_Speed_Post_Rest_of_the_Country:avg_sp_rc.rows[0],
         });
     }catch (err){
         console.log(err);

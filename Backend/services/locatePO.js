@@ -7,7 +7,7 @@ const locatepostoffice=async (req,res,next)=>{
     console.log(Pincode);
     if ((!State || !District) && !Pincode) {
         return res.status(400).json({ error: "All fields are required." });
-      }console.log("1");
+      }
     try{
         const result= await pool.query(`
       SELECT * FROM "Post_Offices"

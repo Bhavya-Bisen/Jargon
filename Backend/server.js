@@ -7,15 +7,15 @@ import bodyParser from "body-parser";
 import { loginRoute, registerRoute,ensureAuthenticated, authorizeRoles } from "./auth/auth.js";
 import {locatepostoffice} from "./services/locatePO.js";
 import { dashboard_data } from "./services/dashboard.js";
+import { StatePO } from "./services/statePO.js";
+import { DistrictPO } from "./services/districtPO.js";
 
 
 env.config();
 const app = express();
 const PORT = process.env.PORT;
 
-app.use(cors({
-  //origin: 'http://your-frontend-domain.com',
-  credentials: true}
+app.use(cors(
 ));
 
 app.use(express.json());
@@ -50,6 +50,8 @@ app.listen(PORT, () => {
 app.post("/login", loginRoute);
 app.post("/register", registerRoute);
 app.post("/locatepostoffice",locatepostoffice);
+app.post("/districtPO",DistrictPO)
+app.post("/locatePO",)
 
 app.get("/user/profile",
   ensureAuthenticated,
@@ -60,3 +62,4 @@ app.get("/user/profile",
 );
 
 app.get("/dashboard",dashboard_data);
+app.get("/statePO",StatePO);
