@@ -11,6 +11,7 @@ export default function LocatePO() {
   const [districts, setDistricts] = useState<string[]>([]); // Fetched districts
   const [isLoadingStates, setIsLoadingStates] = useState(true); // Loading state for states
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(false); // Loading state for districts
+  const [mapHTML, setMapHTML] = useState<string>(""); // Store the map HTML
 
   // Fetch states on component mount
   useEffect(() => {
@@ -53,7 +54,6 @@ export default function LocatePO() {
     }
   };
 
-  // Submit data to the backend
   const submitData = async () => {
     const payload = {
       pincode: pincode || null,
@@ -62,20 +62,19 @@ export default function LocatePO() {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/locatePO", {
+      const response = await fetch("http://localhost:5000/generateMap", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
-      if (!response.ok) throw new Error("Failed to submit data");
+      if (!response.ok) throw new Error("Failed to generate map");
       const result = await response.json();
-      console.log("Response from server:", result);
-      alert("Data submitted successfully!");
+      setMapHTML(result.mapHTML); // Save the map HTML
     } catch (error) {
-      console.error("Error submitting data:", error);
-      alert("Failed to submit data.");
+      console.error("Error generating map:", error);
+      alert("Failed to generate map.");
     }
   };
 
@@ -106,6 +105,7 @@ export default function LocatePO() {
   };
 
   return (
+    <>
     <div className="h-1/2 w-full flex md:flex-row flex-row justify-around items-start">
       <div className="p-5">
         <ul>
@@ -189,5 +189,26 @@ export default function LocatePO() {
         </ul>
       </div>
     </div>
+
+      {/* <div className="flex justify-center items-center">
+        <iframe
+          src="/map.html"
+          width="1128px"
+          height="643px"
+          className=" border-gray-950 border-[5px]"
+          />
+      </div> */}
+
+    {/* Map Generation and showing */}
+    <div className="flex justify-center items-center">
+      <div className=" w-[1128px] h-[643px] ">
+        <div
+          className="border-gray-950 border-[5px]"
+          dangerouslySetInnerHTML={{ __html: mapHTML }}
+        ></div>
+      </div>
+    </div>
+
+    </>
   );
 }

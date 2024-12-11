@@ -16,13 +16,13 @@ export const Header: React.FC<HeaderProps> = ({ bannerSrc }) => {
         <img src='/Logo.png' alt='Top-Logo' className='w-[112px] h-[69px]' />
         <div className='ml-4 flex items-center space-x-4 bgnav rounded-lg '>
           <a
-            href='/login'
+            href='/Login'
             className='text-center textnav hover:bg-[rgba(194,182,168,1)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 '
           >
             Login
           </a>
           <a
-            href='/signup'
+            href='/Signup'
             className='text-center textnav hover:bg-[rgba(194,182,168,1)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 '
           >
             Sign Up
@@ -38,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({ bannerSrc }) => {
         <img
           src={bannerSrc}
           alt='Banner-Homepage'
-          className='flex items-center justify-between gap-0 w-[1128px] h-[643px] mx-auto mt-0 pt-5 pb-16'
+          className='flex items-center justify-between gap-0 w-[1128px] h-[643px] mx-auto mt-0 pt-5 pb-5 rounded-[40px]'
         />
       </div>
     </>

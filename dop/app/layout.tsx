@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Header } from "./(Template)/Header";
-import { Footer } from "./(Template)/Footer";
+import { ConditionalFooter } from "./ConditionalFooter";
 import { DynamicBannerProvider } from "./DynamicBannerProvider"; 
 
 const geistSans = localFont({
@@ -36,7 +35,7 @@ export default function RootLayout({
         <DynamicBannerProvider>
         {children}
         </DynamicBannerProvider>
-        <Footer />
+        <ConditionalFooter />
         </>
       </body>
     </html>

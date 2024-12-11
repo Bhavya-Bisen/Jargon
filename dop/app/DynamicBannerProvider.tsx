@@ -7,6 +7,7 @@ import { Header } from "./(Template)/Header";
 const bannerMap: Record<string, string> = {
   "/LocatePO": "/LocatePO.png",
   "/TrackNTrace": "/TrackNTrace.png",
+  "/Login":"",
 };
 
 export const DynamicBannerProvider: React.FC<PropsWithChildren> = ({ children }) => {
@@ -15,7 +16,7 @@ export const DynamicBannerProvider: React.FC<PropsWithChildren> = ({ children })
 
   return (
     <>
-      <Header bannerSrc={bannerSrc} />
+      {pathname !== "/Login" && <Header bannerSrc={bannerSrc} />}
       {children}
     </>
   );

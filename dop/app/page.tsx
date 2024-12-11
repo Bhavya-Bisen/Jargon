@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import PerformanceDashboard from "./PerformanceDashboard";
-
+import Link from 'next/link';
 export default function Home() {
 
   return (
@@ -25,13 +25,15 @@ export default function Home() {
                 Track N Trace
               </a>
             </li>
-            <li className="bg-[rgba(228,226,214,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
-              <img src="/LocatePostOffice.png" 
-                   className="w-[150px] h-[132px]"/>
-              <a className="text-[rgba(112,65,22,1)]  text-center font-bold text-3xl pb-4">
-                Locate PostOffice
-              </a>
-            </li>
+            <Link href="/LocatePO" passHref>
+              <li className="bg-[rgba(228,226,214,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
+                <img src="/LocatePostOffice.png" 
+                    className="w-[150px] h-[132px]"/>
+                <span className="text-[rgba(112,65,22,1)]  text-center font-bold text-3xl pb-4">
+                  Locate PostOffice
+                </span>
+              </li>
+            </Link>
             <li className="bg-[rgba(228,226,214,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
               <img src="/News.png" 
                    className="w-[150px] h-[132px]"/>

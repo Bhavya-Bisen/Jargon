@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
     },
     {
       label: 'Performance Board',
-      href: '/',
+      href: '/Performance_Deshboard',
     },
     {
       label: 'Tools & Help Center',
