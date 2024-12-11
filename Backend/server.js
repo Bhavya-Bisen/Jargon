@@ -9,7 +9,7 @@ import {locatepostoffice} from "./services/locatePO.js";
 import { dashboard_data } from "./services/dashboard.js";
 import { StatePO } from "./services/statePO.js";
 import { DistrictPO } from "./services/districtPO.js";
-
+import axios from "axios";
 
 env.config();
 const app = express();
@@ -41,18 +41,6 @@ app.get('/', (req, res) => {
   res.send('Backend is running');
 });
 
-// Start server
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-app.post("/login", loginRoute);
-app.post("/register", registerRoute);
-app.post("/locatepostoffice",locatepostoffice);
-app.post("/districtPO",DistrictPO)
-app.post("/locatePO",)
-
 app.get("/user/profile",
   ensureAuthenticated,
   authorizeRoles("admin", "authenticated"),
@@ -62,4 +50,34 @@ app.get("/user/profile",
 );
 
 app.get("/dashboard",dashboard_data);
+
 app.get("/statePO",StatePO);
+
+// Start server
+app.post("/login", loginRoute);
+app.post("/register", registerRoute);
+app.post("/locatepostoffice",locatepostoffice);
+app.post("/districtPO",DistrictPO)
+app.post("/locatePO",)
+app.post("/generateMap", async (req, res) => {
+  const { state, district, pincode } = req.body;
+
+  try {
+    // Send data to the Python backend
+    const pythonResponse = await axios.post("http://localhost:5001/generate_map", {
+      state,
+      district,
+      pincode,
+    });
+
+    // Return the map HTML to the frontend
+    res.status(200).send({ mapHTML: pythonResponse.data });
+  } catch (error) {
+    console.error("Error generating map:", error.message);
+    res.status(500).send({ error: "Failed to generate map" });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
