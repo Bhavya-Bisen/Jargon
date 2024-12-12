@@ -8,6 +8,7 @@ const bannerMap: Record<string, string> = {
   "/LocatePO": "/LocatePO.png",
   "/TrackNTrace": "/TrackNTrace.png",
   "/Login":"",
+  "/Performance_Deshboard":"Performance.png"
 };
 
 export const DynamicBannerProvider: React.FC<PropsWithChildren> = ({ children }) => {

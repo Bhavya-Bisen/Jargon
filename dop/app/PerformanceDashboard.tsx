@@ -101,18 +101,18 @@ export default function PerformanceDashboard() {
                 parseFloat(data.Average_Delivery_Speed_Post_Rest_of_the_Country.Average_Delivery_Time_Speed_Post_Rest_of_the_Country),
               ],
               backgroundColor: [
-                "rgba(75, 192, 192, 0.2)",
-                "rgba(153, 102, 255, 0.2)",
-                "rgba(255, 159, 64, 0.2)",
-                "rgba(54, 162, 235, 0.2)",
-                "rgba(255, 99, 132, 0.2)",
+                "rgba(75,192,192,0.2)",
+                "rgba(153,102,255,0.2)",
+                "rgba(255,159,64,0.2)",
+                "rgba(54,162,235,0.2)",
+                "rgba(255,99,132,0.2)",
               ],
               borderColor: [
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 99, 132, 1)",
+                "rgba(75,192,192,1)",
+                "rgba(153,102,255,1)",
+                "rgba(255,159,64,1)",
+                "rgba(54,162,235,1)",
+                "rgba(255,99,132,1)",
               ],
               borderWidth: 1,
             },
@@ -150,7 +150,7 @@ export default function PerformanceDashboard() {
     <div className="block justify-center mt-10">
       <div className="flex justify-center items-center">
         <div className="rounded-full border border-[rgba(112,65,22,1)] justify-center bg-[rgba(194,182,168,0.74)] w-[518px] h-[46px]">
-          <a className="text-[rgba(112,65,22,1)] justify-center flex items-center font-bold text-3xl pb-4" href="/">
+          <a className="text-[rgba(112,65,22,1)] justify-center flex items-center font-bold text-3xl pb-4" href="/Performance_Deshboard">
             Performance Dashboard
           </a>
         </div>
