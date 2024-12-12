@@ -2,6 +2,7 @@
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/dropdown";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@nextui-org/react";
+import { Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   BarController,
@@ -17,6 +18,19 @@ import { CheckboxGroup, Checkbox } from "@nextui-org/react";
 // Register necessary components
 ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
+// Helper Function to Generate Pie Chart Data
+const generatePieChartData = (labels, data, colors) => ({
+  labels,
+  datasets: [
+    {
+      label: "Percentage",
+      data,
+      backgroundColor: colors,
+      borderColor: colors.map((color) => color.replace("0.2", "1")), // Darker border color
+      borderWidth: 1,
+    },
+  ],
+});
 interface DashboardData {
   message: string;
   Average_Delivery_Time: { Average_Delivery_Time_Days: string };
@@ -221,35 +235,35 @@ export default function PerformanceDashboard() {
                         )}
                         <Checkbox value="State">State</Checkbox>
                         {selectedCheckboxes.includes("State") && (
-  <Dropdown>
-    <DropdownTrigger>
-      <Button variant="bordered">{selectedState || "Select State"}</Button>
-    </DropdownTrigger>
-    <DropdownMenu
-      className="bg-white overflow-y-auto max-h-[200px]"
-      disallowEmptySelection
-      aria-label="State selection"
-      selectionMode="single"
-      onSelectionChange={(keys) => handleStateSelection(new Set(keys as Set<string>))}
-    >
-      {isLoadingStates ? (
-        <DropdownItem key="loading" textValue="Loading">
-          Loading...
-        </DropdownItem>
-      ) : states.length > 0 ? (
-        states.map((state) => (
-          <DropdownItem key={state} textValue={state}>
-            {state}
-          </DropdownItem>
-        ))
-      ) : (
-        <DropdownItem key="no-states" textValue="No states available">
-          No states available
-        </DropdownItem>
-      )}
-    </DropdownMenu>
-  </Dropdown>
-)}
+                          <Dropdown>
+                            <DropdownTrigger>
+                              <Button variant="bordered">{selectedState || "Select State"}</Button>
+                            </DropdownTrigger>
+                            <DropdownMenu
+                              className="bg-white overflow-y-auto max-h-[200px]"
+                              disallowEmptySelection
+                              aria-label="State selection"
+                              selectionMode="single"
+                              onSelectionChange={(keys) => handleStateSelection(new Set(keys as Set<string>))}
+                            >
+                              {isLoadingStates ? (
+                                <DropdownItem key="loading" textValue="Loading">
+                                  Loading...
+                                </DropdownItem>
+                              ) : states.length > 0 ? (
+                                states.map((state) => (
+                                  <DropdownItem key={state} textValue={state}>
+                                    {state}
+                                  </DropdownItem>
+                                ))
+                              ) : (
+                                <DropdownItem key="no-states" textValue="No states available">
+                                  No states available
+                                </DropdownItem>
+                              )}
+                            </DropdownMenu>
+                          </Dropdown>
+                        )}
                         <Checkbox value="City/District">City/District</Checkbox>
                         <Checkbox value="Post Office Name">Post Office Name</Checkbox>
                       </CheckboxGroup>
@@ -259,57 +273,42 @@ export default function PerformanceDashboard() {
             </div>
             <div>
               <ul>
-                <li className="bg-[rgba(228,226,214,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
-                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">Average ROC Speed Post Delivery Time</a>
+                <div className="block">
+                <li className="bg-[rgba(193,200,184,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
+                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">Average Time Taken for Delivery</a>
                   <span className="text-[rgba(79,46,16,1)] font-outfit text-4xl font-semibold text-center [text-shadow:3px_3px_6px_rgba(0,0,0,0.5)]" >{data ? parseFloat(data.Average_Delivery_Time.Average_Delivery_Time_Days).toFixed(2) : "Loading..."} Days</span>
                 </li>
-                <li className="bg-[rgba(228,226,214,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
-                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">Average Local Speed Post Delivery Time</a>
+                <li className="bg-[rgba(160,177,100,0.39)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
+                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-4xl pb-4">No. of Delayed Delivery</a>
                 </li>
-                <li className="bg-[rgba(228,226,214,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
-                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">Delayed Percentage Deliveries</a>
+                <li className="bg-[rgba(190,197,164,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
+                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">No. of Delayed Delivery</a>
                   <span className="text-[rgba(79,46,16,1)] font-outfit text-4xl font-semibold text-center [text-shadow:3px_3px_6px_rgba(0,0,0,0.5)]">
                     {data?.Delayed_Percentage_Deliveries?.Delayed_Deliveries_Percentage 
                       ? `${parseFloat(data.Delayed_Percentage_Deliveries.Delayed_Deliveries_Percentage).toFixed(2)}%`
                       : "N/A"}
                   </span>
                 </li>
-                <li className="bg-[rgba(228,226,214,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
-                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">Total Number of Deliveries</a>
-                  <span className="text-[rgba(79,46,16,1)] font-outfit text-4xl font-semibold text-center [text-shadow:3px_3px_6px_rgba(0,0,0,0.5)]">
-                    {data?.Total_Deliveries?.Total_Deliveries || "N/A"}
-                  </span>
-                </li>
-                <li className="bg-[rgba(228,226,214,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
-                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">Total Delayed Number of Deliveries</a>
-                  <span className="text-[rgba(79,46,16,1)] font-outfit text-4xl font-semibold text-center [text-shadow:3px_3px_6px_rgba(0,0,0,0.5)]">
-                    {data?.Delayed_Number_Deliveries?.Delayed_Deliveries_Count || "N/A"}
-                  </span>
-                </li>
-                <li className="bg-[rgba(228,226,214,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
-                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">Total On-Time Deliveries</a>
-                  <span className="text-[rgba(79,46,16,1)] font-outfit text-4xl font-semibold text-center [text-shadow:3px_3px_6px_rgba(0,0,0,0.5)]">
-                    {data?.Total_On_Time_Delivery?.On_Time_Deliveries || "N/A"}
-                  </span>
-                </li>
-                <li className="bg-[rgba(228,226,214,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
-                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">Average Capital Speed Post Delivery Time</a>
-                </li>
-                <li className="bg-[rgba(228,226,214,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
-                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">On-Time Delivery Rate</a>
-                  <span className="text-[rgba(79,46,16,1)] font-outfit text-4xl font-semibold text-center [text-shadow:3px_3px_6px_rgba(0,0,0,0.5)]">
-                    {data?.On_Time_Delivery_Rate?.On_Time_Delivery_Rate_Percentage 
-                      ? `${parseFloat(data.On_Time_Delivery_Rate.On_Time_Delivery_Rate_Percentage).toFixed(2)}%`
-                      : "N/A"}
-                  </span>
-                </li>
+                </div>
+                <div  className="block">
+                  <li className="bg-[rgba(241,234,216,1)] w-[287px] h-[192px] rounded-3xl inline-flex flex-col justify-center items-center mx-6">
+                    {/* Pie1 */}
+                  </li>
+                  <li className="bg-[rgba(241,234,216,1)] w-[287px] h-[192px] rounded-3xl inline-flex flex-col justify-center items-center mx-6">
+                    {/*  Pie2 */}
+                  </li>
+                  <li className="bg-[rgba(241,234,216,1)] w-[462px] h-[238px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
+                    
+                  </li>
+                </div>
+                <div className="block">
+                  <li className="bg-[rgba(241,234,216,1)] w-[609px] h-[308px] rounded-3xl inline-flex flex-col justify-center items-center mx-6">
+                    
+                  </li>
+                  <li className="bg-[rgba(241,234,216,1)] w-[464px] h-[273px] rounded-3xl inline-flex flex-col justify-center items-center mx-6">
 
-                <div>
-                  {data ? (
-                    <canvas ref={chartRef}></canvas>
-                  ) : (
-                    <div>.</div>
-                  )}
+                  </li>
+                      
                 </div>
                 <div className=" w-[1128px] h-[643px] ">
                           <div
