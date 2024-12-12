@@ -9,6 +9,8 @@ import {locatepostoffice} from "./services/locatePO.js";
 import { dashboard_data } from "./services/dashboard.js";
 import { StatePO } from "./services/statePO.js";
 import { DistrictPO } from "./services/districtPO.js";
+import { DeliveryPO } from "./services/DeliveryPO.js";
+import { SDeliveryPO } from "./services/SDeliveryPO.js";
 import axios from "axios";
 
 env.config();
@@ -58,6 +60,8 @@ app.post("/login", loginRoute);
 app.post("/register", registerRoute);
 app.post("/locatepostoffice",locatepostoffice);
 app.post("/districtPO",DistrictPO)
+app.post("/deliveryPO",DeliveryPO)
+app.post("/sdeliveryPO",SDeliveryPO)
 app.post("/locatePO",)
 app.post("/generateMap", async (req, res) => {
   const { state, district, pincode } = req.body;
