@@ -17,7 +17,10 @@ env.config();
 const app = express();
 const PORT = process.env.PORT;
 
-app.use(cors(
+app.use(cors({
+  origin: 'http://localhost:3000', // Replace with your actual frontend origin
+  credentials: true // Allow credentials
+}
 ));
 
 app.use(express.json());
@@ -47,7 +50,15 @@ app.get("/user/profile",
   ensureAuthenticated,
   authorizeRoles("admin", "authenticated"),
   (req, res) => {
-    res.send("Welcome to your profile");
+    try{
+    res.status(200).json({
+      message: "Your Data is ready",
+      Permission:"Accepted",
+    });
+  }catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Server error." });
+  }
   }
 );
 
