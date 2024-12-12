@@ -8,7 +8,8 @@ const bannerMap: Record<string, string> = {
   "/LocatePO": "/LocatePO.png",
   "/TrackNTrace": "/TrackNTrace.png",
   "/Login":"",
-  "/Performance_Deshboard":"Performance.png"
+  "/Performance_Deshboard":"Performance.png",
+  "/SignUp":"",
 };
 
 export const DynamicBannerProvider: React.FC<PropsWithChildren> = ({ children }) => {
@@ -17,7 +18,7 @@ export const DynamicBannerProvider: React.FC<PropsWithChildren> = ({ children })
 
   return (
     <>
-      {pathname !== "/Login" && <Header bannerSrc={bannerSrc} />}
+      {pathname !== "/Login" && pathname !== "/SignUp" && <Header bannerSrc={bannerSrc} />}
       {children}
     </>
   );

@@ -22,10 +22,10 @@ export const Header: React.FC<HeaderProps> = ({ bannerSrc }) => {
             Login
           </a>
           <a
-            href='/Signup'
+            href='/SignUp'
             className='text-center textnav hover:bg-[rgba(194,182,168,1)] hover:text-[rgba(112, 65, 22, 1)] rounded-lg p-2 '
           >
-            Sign Up
+            SignUp
           </a>
         </div>
       </div>

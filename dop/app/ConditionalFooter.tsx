@@ -11,5 +11,9 @@ export const ConditionalFooter: React.FC = () => {
     return null;
   }
 
+  if (pathname === "/SignUp") {
+    return null;
+  }
+
   return <Footer />;
 };
