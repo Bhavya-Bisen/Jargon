@@ -1,0 +1,3 @@
+unauthenticated,Can view public data,1
+authenticated,Customers with personalized data access,2
+admin,DoP officials with elevated privileges,3

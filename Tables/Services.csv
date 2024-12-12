@@ -1,0 +1,26 @@
+DY1101,First-Class Mail Local,Delivery,2,Days
+DY1102,First-Class Mail Metro-Metro,Delivery,2,Days
+DY1103,First-Class Mail Same State,Delivery,2,Days
+DY1104,First-Class Mail Rest of the Country,Delivery,5,Days
+DY1201,Speed Post Local,Delivery,1,Days
+DY1202,Speed Post Metro-Metro,Delivery,1,Days
+DY1203,Speed Post Same State,Delivery,1,Days
+DY1204,Speed Post Rest of the Country,Delivery,4,Days
+DY1301,International EMS to Australia,Delivery,4,Days
+DY1302,International EMS to Canada,Delivery,5,Days
+DY1303,International EMS to China,Delivery,4,Days
+DY1304,International EMS to USA,Delivery,4,Days
+FN2101,Money Order Local,Financial,2,Days
+FN2102,Money Order Metro-Metro,Financial,2,Days
+FN2103,Money Order Rest of India,Financial,4,Days
+FN2201,International Money Transfer Instant Payment,Financial,10,Minutes
+FN2301,Post Office Savings Bank Account Opening,Financial,1,Days
+FN2302,Post Office Savings Account Transfer,Financial,7,Days
+CT3101,Sale of Stamps and Stationery,Counter,3,Minutes
+CT3102,Booking of Registered Articles,Counter,10,Minutes
+CT3103,Speed Post Booking,Counter,10,Minutes
+CT3104,Philatelic Items Sale,Counter,1,Days
+GR4101,Acknowledgment of Complaints,Grievance,0,Days
+GR4102,Settlement of Complaints,Grievance,60,Days
+GR4103,Complaints Requiring Investigation,Grievance,90,Days
+DY1205,Speed Post State Capital to State Capital,Delivery,4,Days
