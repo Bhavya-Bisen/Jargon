@@ -10,27 +10,41 @@ import {
   CategoryScale,
   LinearScale,
   Title,
+  ArcElement,
   Tooltip,
   Legend,
 } from "chart.js";
 import { CheckboxGroup, Checkbox } from "@nextui-org/react";
 
 // Register necessary components
-ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
+ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, ArcElement,Title, Tooltip, Legend);
 
 // Helper Function to Generate Pie Chart Data
-const generatePieChartData = (labels, data, colors) => ({
+const generatePieChartData = (
+  labels: string[], // Array of labels
+  data: number[],   // Array of data values
+  colors: string[]  // Array of colors
+) => ({
   labels,
   datasets: [
     {
       label: "Percentage",
       data,
       backgroundColor: colors,
-      borderColor: colors.map((color) => color.replace("0.2", "1")), // Darker border color
+      borderColor: colors.map((color: string) => color.replace("0.2", "1")), // Ensure 'color' has a type
       borderWidth: 1,
     },
   ],
 });
+
+interface MonthlyDelivery {
+  Month: string;
+  Delivery_Count: string;
+}
+interface ServiceDelivery {
+  Service_Name: string;
+  Delivery_Count: string;
+}
 interface DashboardData {
   message: string;
   Average_Delivery_Time: { Average_Delivery_Time_Days: string };
@@ -44,6 +58,8 @@ interface DashboardData {
   Average_Delivery_Speed_Post_Same_State: { Average_Delivery_Time_Speed_Post_Same_State: string };
   Average_Delivery_Speed_Post_Capital_to_Capital_State: { Average_Delivery_Time_Speed_Post_Capital_to_Capital_State: string };
   Average_Delivery_Speed_Post_Rest_of_the_Country: { Average_Delivery_Time_Speed_Post_Rest_of_the_Country: string };
+  Monthly_Deliveries: MonthlyDelivery[];
+  Service_Deliveries: ServiceDelivery[];
 }
 
 export default function PerformanceDashboard() {
@@ -60,6 +76,15 @@ export default function PerformanceDashboard() {
   const handleCheckboxChange = (value: string[]) => {
     setSelectedCheckboxes([...value]); // Ensure value is an array
   };
+  // Refs to manage three separate bar graphs
+  const chartRef1 = useRef<HTMLCanvasElement | null>(null);
+  const chartRef2 = useRef<HTMLCanvasElement | null>(null);
+  const chartRef3 = useRef<HTMLCanvasElement | null>(null);
+  
+  // Refs to manage Chart.js instances for cleanup and re-rendering
+  const chartInstance1 = useRef<ChartJS | null>(null);
+  const chartInstance2 = useRef<ChartJS | null>(null);
+  const chartInstance3 = useRef<ChartJS | null>(null);
 
   // Fetch default data on component mount
   useEffect(() => {
@@ -175,7 +200,7 @@ export default function PerformanceDashboard() {
     const state = Array.from(keys).join(", ");
     setSelectedState(state);
     fetchStateData(state); // Fetch data for the selected state
-     
+    submitData();
   };
 
   const submitData = async () => {
@@ -194,11 +219,158 @@ export default function PerformanceDashboard() {
     if (!response.ok) throw new Error("Failed to generate map");
     const result = await response.json();
     setMapHTML(result.mapHTML); // Save the map HTML
-  } catch (error) {
-    console.error("Error generating map:", error);
-    alert("Failed to generate map.");
+    } catch (error) {
+      console.error("Error generating map:", error);
+      alert("Failed to generate map.");
+    }
+  };
+
+  // Helper function to initialize or update a bar graph
+const createBarGraph = (
+  ref: React.RefObject<HTMLCanvasElement>, // Reference to the canvas element
+  instance: React.MutableRefObject<ChartJS | null>, // Reference to the Chart.js instance
+  labels: string[], // Labels for the X-axis
+  dataset: number[], // Data values for the graph
+  label: string // Label for the dataset
+): void => {
+  if (ref.current) {
+    if (instance.current) {
+      instance.current.destroy(); // Destroy the existing Chart.js instance
+      instance.current = null; // Reset the instance reference
+    }
+
+    // Create a new Chart.js instance
+    instance.current = new ChartJS(ref.current, {
+      type: "bar",
+      data: {
+        labels, // X-axis labels
+        datasets: [
+          {
+            label, // Dataset label
+            data: dataset, // Y-axis values
+            backgroundColor: [
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(104, 132, 245, 0.2)",
+              "rgba(245, 131, 193, 0.2)",
+              "rgba(233, 196, 106, 0.2)",
+              "rgba(102, 255, 102, 0.2)",
+              "rgba(255, 102, 102, 0.2)",
+            ], // Set different colors for each month
+            borderColor: [
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+              "rgba(255, 159, 64, 1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 99, 132, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(104, 132, 245, 1)",
+              "rgba(245, 131, 193, 1)",
+              "rgba(233, 196, 106, 1)",
+              "rgba(102, 255, 102, 1)",
+              "rgba(255, 102, 102, 1)",
+            ], // Set border colors matching the background
+            borderWidth: 1, // Border width for bars
+          },
+        ],
+      },
+      options: {
+        responsive: true, // Make the graph responsive
+        plugins: {
+          legend: {
+            display: true, // Show legend
+            position: "top", // Position of legend
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true, // Ensure Y-axis starts at zero
+          },
+        },
+      },
+    });
   }
 };
+
+  // Create three bar graphs when data changes
+  useEffect(() => {
+    if (data?.Monthly_Deliveries) {
+      // Extract months and delivery counts
+      const months = data.Monthly_Deliveries.map((item) => item.Month.trim());
+      const deliveryCounts = data.Monthly_Deliveries.map((item) => parseInt(item.Delivery_Count));
+
+      const s=data.Service_Deliveries.map((item)=>item.Service_Name.trim());
+      const d=data.Service_Deliveries.map((item)=> parseInt(item.Delivery_Count));
+      console.log("Months:", months); // Debugging log for months
+      console.log("Delivery Counts:", deliveryCounts); // Debugging log for delivery counts
+  
+      // Graph 1: Monthly Delivery Counts
+      createBarGraph(
+        chartRef1,
+        chartInstance1,
+        months, // Dynamically pass months
+        deliveryCounts, // Dynamically pass delivery counts
+        "Monthly Delivery Counts"
+      );
+  
+      // Graph 2: Delivery Counts
+      createBarGraph(
+        chartRef2,
+        chartInstance2,
+        s,
+        d,
+        "Delivery Counts"
+      );
+  
+      // Graph 3: Delivery Rates
+      createBarGraph(
+        chartRef3,
+        chartInstance3,
+        ["On-Time (%)", "Delayed (%)"],
+        [
+          parseFloat(data.On_Time_Delivery_Rate.On_Time_Delivery_Rate_Percentage),
+          parseFloat(data.Delayed_Percentage_Deliveries.Delayed_Deliveries_Percentage),
+        ],
+        "Delivery Rates (%)"
+      );
+    }
+  }, [data]);
+  
+
+  // Pie Chart Data
+  const pie1Data = data
+    ? generatePieChartData(
+        ["On Time Deliveries", "Delayed Deliveries", "Total Deliveries"],
+        [
+          parseInt(data.Total_On_Time_Delivery.On_Time_Deliveries),
+          parseInt(data.Delayed_Number_Deliveries.Delayed_Deliveries_Count),
+          parseInt(data.Total_Deliveries.Total_Deliveries),
+        ],
+        ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"]
+      )
+    : null;
+
+  const pie2Data = data
+    ? generatePieChartData(
+        ["On Time (%)", "Delayed (%)"],
+        [
+          parseFloat(data.On_Time_Delivery_Rate.On_Time_Delivery_Rate_Percentage),
+          parseFloat(data.Delayed_Percentage_Deliveries.Delayed_Deliveries_Percentage),
+        ],
+        ["rgba(153, 102, 255, 0.2)", "rgba(255, 159, 64, 0.2)"]
+      )
+    : null;
+  
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
 
     return (
         <>
@@ -280,42 +452,71 @@ export default function PerformanceDashboard() {
                 </li>
                 <li className="bg-[rgba(160,177,100,0.39)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
                   <a className="text-[rgba(112,65,22,1)] text-center font-bold text-4xl pb-4">No. of Delayed Delivery</a>
-                </li>
-                <li className="bg-[rgba(190,197,164,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
-                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">No. of Delayed Delivery</a>
                   <span className="text-[rgba(79,46,16,1)] font-outfit text-4xl font-semibold text-center [text-shadow:3px_3px_6px_rgba(0,0,0,0.5)]">
                     {data?.Delayed_Percentage_Deliveries?.Delayed_Deliveries_Percentage 
-                      ? `${parseFloat(data.Delayed_Percentage_Deliveries.Delayed_Deliveries_Percentage).toFixed(2)}%`
+                      ? `${parseFloat(data.Delayed_Number_Deliveries.Delayed_Deliveries_Count)}`
+                      : "N/A"}
+                  </span>
+                </li>
+                <li className="bg-[rgba(190,197,164,1)] w-[308px] h-[271px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
+                  <a className="text-[rgba(112,65,22,1)] text-center font-bold text-3xl pb-4">No. of On-Time Delivery</a>
+                  <span className="text-[rgba(79,46,16,1)] font-outfit text-4xl font-semibold text-center [text-shadow:3px_3px_6px_rgba(0,0,0,0.5)]">
+                    {data?.Delayed_Percentage_Deliveries?.Delayed_Deliveries_Percentage 
+                      ? `${parseFloat(data.Total_On_Time_Delivery.On_Time_Deliveries)}`
                       : "N/A"}
                   </span>
                 </li>
                 </div>
                 <div  className="block">
-                  <li className="bg-[rgba(241,234,216,1)] w-[287px] h-[192px] rounded-3xl inline-flex flex-col justify-center items-center mx-6">
-                    {/* Pie1 */}
-                  </li>
-                  <li className="bg-[rgba(241,234,216,1)] w-[287px] h-[192px] rounded-3xl inline-flex flex-col justify-center items-center mx-6">
-                    {/*  Pie2 */}
-                  </li>
+                <li className="bg-[rgba(241,234,216,1)] w-[287px] h-[192px] rounded-3xl inline-flex flex-col justify-center items-center mx-6">
+                  <h3 className="text-center text-lg font-semibold ">
+                  Delivery Fullfillment Status
+                  </h3>
+                  {pie1Data ? (
+                    <Doughnut data={pie1Data} />
+                  ) : (
+                    "Loading Pie Chart..."
+                  )}
+                </li>
+                <li className="bg-[rgba(241,234,216,1)] w-[287px] h-[192px] rounded-3xl inline-flex flex-col justify-center items-center mx-6">
+                <h3 className="text-center text-lg font-semibold">
+                Delivery Delayed %
+                </h3>
+                {pie2Data ? (
+                  <Doughnut data={pie2Data} />
+                ) : (
+                  "Loading Pie Chart..."
+                )}
+              </li>
                   <li className="bg-[rgba(241,234,216,1)] w-[462px] h-[238px] rounded-3xl inline-flex flex-col justify-center items-center m-6">
-                    
+                    <div className="w-full max-w-4xl">
+                      <h3 className="text-xl font-semibold mb-4 text-center">Monthly Delivery</h3>
+                      <canvas ref={chartRef1}></canvas>
+                    </div>
                   </li>
                 </div>
                 <div className="block">
                   <li className="bg-[rgba(241,234,216,1)] w-[609px] h-[308px] rounded-3xl inline-flex flex-col justify-center items-center mx-6">
-                    
+                    <div className="w-full max-w-4xl">
+                      <h3 className="text-xl font-semibold mb-4 text-center">Types of Delivery</h3>
+                      <canvas ref={chartRef2}></canvas>
+                    </div>
                   </li>
                   <li className="bg-[rgba(241,234,216,1)] w-[464px] h-[273px] rounded-3xl inline-flex flex-col justify-center items-center mx-6">
-
+                    {/* Add bar graph2 */}
+                    <div className="w-full max-w-4xl">
+                      <h3 className="text-xl font-semibold mb-4 text-center">Delivery Vol. by the day</h3>
+                      <canvas ref={chartRef3}></canvas>
+                    </div>  
                   </li>
                       
                 </div>
-                <div className=" w-[1128px] h-[643px] ">
-                          <div
-                            className="border-gray-950 border-[5px]"
-                            dangerouslySetInnerHTML={{ __html: mapHTML }}
-                          ></div>
-                        </div>
+                <div className=" w-[1128px] h-[643px] mt-10">
+                  <div
+                        className="border-gray-950 border-[5px]"
+                        dangerouslySetInnerHTML={{ __html: mapHTML }}
+                  ></div>
+                </div>
               </ul>
             </div>
           </div>
